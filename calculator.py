@@ -58,16 +58,22 @@ class Calculator(limit):
 class CashCalculator(Calculator):
 
     def get_today_cash_remained(currency):
-        valute = {"rub":1, "usd":USD_RATE,"eur":EURO_RATE}
+        valute = {
+                    "rub":[1, "руб"],
+                    "usd":[USD_RATE, "USD"],
+                    "eur":[EURO_RATE, "Euro"]
+        }
         # Округлять до сотых долей
-        ostatok = limit - sum(records.values)
-        if current_sum > 0:
-            return f"На сегодня осталось {ostatok} руб/USD/Euro"
-        elif current_sum < 0:
-            return f"Денег нет, держись: твой долг - {ostatok} руб/USD/Euro"
+        balans = limit - sum(records.values())
+        balans_valute = round(balans / valute[currency][0], 2)
+        balans_string = str(balans_valute).lstrip("-") + " " + str(valute[currency][1])
+
+        if balans > 0:
+            return "На сегодня осталось " +  balans_string
+        elif balans < 0:
+            return "Денег нет, держись: твой долг - " + balans_string
         else:
             return "Денег нет, держись"
-
 
 
 class CaloriesCalculator(Calculator):
