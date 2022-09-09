@@ -26,7 +26,7 @@ class Record:
         self.comment = "пустая запись"
 
 class Calculator(limit):
-     def __init__():
+    def __init__():
         self.limit = limit
         self.records = []
 
