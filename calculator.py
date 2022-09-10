@@ -56,7 +56,6 @@ class Calculator(limit):
 
 
 class CashCalculator(Calculator):
-
     def get_today_cash_remained(currency):
         valute = {
                     "rub":[1, "руб"],
@@ -64,9 +63,14 @@ class CashCalculator(Calculator):
                     "eur":[EURO_RATE, "Euro"]
         }
         # Округлять до сотых долей
-        balans = limit - sum(records.values())
+        # balans = limit - sum(records.values())
+        balans = 0
+        for value in records.values():
+            print(value)
+
         balans_valute = round(balans / valute[currency][0], 2)
-        balans_string = str(balans_valute).lstrip("-") + " " + str(valute[currency][1])
+        balans_string = str(balans_valute).lstrip("-")
+        balans_string += " " + str(valute[currency][1])
 
         if balans > 0:
             return "На сегодня осталось " +  balans_string
@@ -74,7 +78,6 @@ class CashCalculator(Calculator):
             return "Денег нет, держись: твой долг - " + balans_string
         else:
             return "Денег нет, держись"
-
 
 class CaloriesCalculator(Calculator):
     def add_record():
