@@ -31,22 +31,23 @@ class Calculator(limit):
         self.records = []
 
     def get_today_stats():
-        day = dt.datetime.now().date()
-        total = 0
-        for record in self.records:
-            if record.date == day:
-                total += record.amount
-        return total
+        today = dt.datetime.now().date()
+        today_stats = 0
+        for value in self.records.values():
+            day_of_record = dt.datetime.strptime(value[1], date_format).date()
+            if today == day_of_record:
+                today_stats += value[0]
+        return today_stats
 
     def get_week_stats():
         end_day = dt.datetime.now().date()
         start_day = dt.datetime.now().date() - dt.timedelta(days=6)
-        total = 0
+        week_stats = 0
         for value in self.records.values():
             day_of_record = dt.datetime.strptime(value[1], date_format).date()
             if start_day < day_of_record <= end_day:
-                total += value[0]
-        return total
+                week_stats += value[0]
+        return week_stats
 
     def add_record(record):
         self.records.append(record)
@@ -64,10 +65,8 @@ class CashCalculator(Calculator):
         }
         # Округлять до сотых долей
         # balans = limit - sum(records.values())
-        today_cash_spent = 0 # Потрачено
-        for value in self.records.values():
-            today_cash_spent += value[0]
-        today_cash_remained = limit - today_cash_spent
+        today_cash_spent = self.get_today_stats()
+        today_cash_remained = self.limit - today_cash_spent
         balans_valute = round(today_cash_remained / valute[currency][0], 2)
         balans_string = str(balans_valute).lstrip("-")
         balans_string += " " + str(valute[currency][1])
@@ -81,10 +80,8 @@ class CashCalculator(Calculator):
 
 class CaloriesCalculator(Calculator):
     def get_calories_remained():
-        calories_received = 0 # Потрачено
-        for value in self.records.values():
-            calories_received += value[0]
-        calories_remained = limit - calories_received
+        calories_received = self.get_today_stats()
+        calories_remained = self.limit - calories_received
         if calories_remained > 0:
             return f"Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не более {calories_remained} кКал"
         return "Хватит есть!"
