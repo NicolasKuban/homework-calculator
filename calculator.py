@@ -39,11 +39,11 @@ class Calculator(limit):
         return total
 
     def get_week_stats():
-        stop_day = dt.datetime.now().date()
+        end_day = dt.datetime.now().date()
         start_day = dt.datetime.now().date() - 7
         total = 0
         for record in self.records:
-            if stop_day > record > start_day:
+            if end_day > record > start_day:
                 total += record.amount
         return total
 
@@ -65,7 +65,7 @@ class CashCalculator(Calculator):
         # Округлять до сотых долей
         # balans = limit - sum(records.values())
         today_cash_spent = 0 # Потрачено
-        for value in records.values():
+        for value in self.records.values():
             today_cash_spent += value[0]
         today_cash_remained = limit - today_cash_spent
         balans_valute = round(today_cash_remained / valute[currency][0], 2)
@@ -80,23 +80,15 @@ class CashCalculator(Calculator):
             return "Денег нет, держись"
 
 class CaloriesCalculator(Calculator):
-    def add_record():
-        pass
-
-    def get_today_stats():
-        pass
-
     def get_calories_remained():
         calories_received = 0 # Потрачено
-        for value in records.values():
+        for value in self.records.values():
             calories_received += value[0]
         calories_remained = limit - calories_received
         if calories_remained > 0:
             return f"Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не более {calories_remained} кКал"
         return "Хватит есть!"
 
-    def get_week_stats():
-        pass
 
 
 
