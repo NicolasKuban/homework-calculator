@@ -64,17 +64,17 @@ class CashCalculator(Calculator):
         }
         # Округлять до сотых долей
         # balans = limit - sum(records.values())
-        balans = 0
+        today_cash_spent = 0 # Потрачено
         for value in records.values():
-            print(value)
-
-        balans_valute = round(balans / valute[currency][0], 2)
+            today_cash_spent += value[0]
+        today_cash_remained = limit - today_cash_spent
+        balans_valute = round(today_cash_remained / valute[currency][0], 2)
         balans_string = str(balans_valute).lstrip("-")
         balans_string += " " + str(valute[currency][1])
 
-        if balans > 0:
+        if today_cash_remained > 0:
             return "На сегодня осталось " +  balans_string
-        elif balans < 0:
+        elif today_cash_remained < 0:
             return "Денег нет, держись: твой долг - " + balans_string
         else:
             return "Денег нет, держись"
@@ -87,9 +87,13 @@ class CaloriesCalculator(Calculator):
         pass
 
     def get_calories_remained():
-        # Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не более N кКал», если лимит limit не достигнут,
-        #или «Хватит есть!», если лимит достигнут или превышен.
-        pass
+        calories_received = 0 # Потрачено
+        for value in records.values():
+            calories_received += value[0]
+        calories_remained = limit - calories_received
+        if calories_remained > 0:
+            return f"Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не более {calories_remained} кКал"
+        return "Хватит есть!"
 
     def get_week_stats():
         pass

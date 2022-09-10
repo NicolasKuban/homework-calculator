@@ -15,7 +15,6 @@ EURO_RATE = 60.80
 limit = 1000
 records = {"today": [200, "2022-09-09", "Magnit"], "yestuday": [1790, "2022-09-10", "five"], "tomorow":[10, "2022-09-10","Lux"]}
 
-
 def get_today_cash_remained(currency):
     valute = {
                 "rub":[1, "руб"],
@@ -24,20 +23,21 @@ def get_today_cash_remained(currency):
     }
     # Округлять до сотых долей
     # balans = limit - sum(records.values())
-    spent = 0 # Потрачено
+    today_cash_spent = 0 # Потрачено
     for value in records.values():
-        spent += value[0]
-    balans = limit - spent
-    balans_valute = round(balans / valute[currency][0], 2)
+        today_cash_spent += value[0]
+    today_cash_remained = limit - today_cash_spent
+    balans_valute = round(today_cash_remained / valute[currency][0], 2)
     balans_string = str(balans_valute).lstrip("-")
     balans_string += " " + str(valute[currency][1])
 
-    if balans > 0:
+    if today_cash_remained > 0:
         return "На сегодня осталось " +  balans_string
-    elif balans < 0:
+    elif today_cash_remained < 0:
         return "Денег нет, держись: твой долг - " + balans_string
     else:
         return "Денег нет, держись"
+
 
 
 print(get_today_cash_remained("rub"))
