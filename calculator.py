@@ -40,13 +40,13 @@ class Calculator(limit):
 
     def get_week_stats():
         end_day = dt.datetime.now().date()
-        start_day = dt.datetime.now().date() - 7
+        start_day = dt.datetime.now().date() - dt.timedelta(days=6)
         total = 0
-        for record in self.records:
-            if end_day > record > start_day:
-                total += record.amount
+        for value in self.records.values():
+            day_of_record = dt.datetime.strptime(value[1], date_format).date()
+            if start_day < day_of_record <= end_day:
+                total += value[0]
         return total
-
 
     def add_record(record):
         self.records.append(record)
